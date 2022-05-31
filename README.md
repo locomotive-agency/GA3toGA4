@@ -14,6 +14,7 @@ This notebook aims to provide 3 main functions
 2. Set up a scheduled query for a daily recurring pull of new GA4 data.
 3. Backfill formatted GA4 data with historical GA3 data
 
+<br/><br/>
 
 ### Pulled GA3 & GA4 Data
 
