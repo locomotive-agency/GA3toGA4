@@ -40,7 +40,8 @@ This notebook aims to provide 3 main functions
 The table above shows what GA3 data is matched with what GA4 data by default. You can edit these values by changing ga4-to-ga3-query.sql and process_ga3.py. 
 
 **Note**: ga:conversion_event is only a placeholder for whatever GA3 conversion event you wish to pull.
-<br/><br/><br/><br/>
+
+<br/><br/><br/>
 
 ## How To Use
 
@@ -121,9 +122,13 @@ Run to backfil GA3 data to your GA4 data.
 #### Review Data
 Run to pull data from the target dataset for review.
 
+<br/><br/><br/>
+
 ## Acknowledgements
 * Thank you to [JR](https://github.com/jroakes), [Joe](https://github.com/joejoinerr), and [Savannah](https://github.com/SavannahCasto) for the work on the creation of this tool.
 * This tool was created and released open for the SEO community by [Locomotive.agency](https://locomotive.agency/).
+
+<br/><br/><br/>
 
 ## Feedback
 If any errors, concerns, or areas for improvement are found, please open an issue for it on this repo.
