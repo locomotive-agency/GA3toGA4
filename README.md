@@ -5,7 +5,7 @@ A Python tool for formatting GA4 data to match and be backfilled with historical
 
 ### Welcome to GA4 to GA3 tool
 
-GA3 to GA3 is a tool for creating and filling a Bigquery table with available GA4 data and formatting it to be compatible with historical data pulled from the Google Analytics Reporting API v4 for GA3 data. This tool has been designed to run in google colab and to automate stuff.
+GA3 to GA3 is a tool for creating and filling a Bigquery table with available GA4 data and formatting it to be compatible with historical data pulled from the Google Analytics Reporting API v4 for GA3 data. This tool has been designed to run in google colab and to automate a majority of the process.
 
 This notebook aims to provide 3 main functions
 1. Create table with select GA4 data formatted to GA3 data style.
