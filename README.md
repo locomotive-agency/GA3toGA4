@@ -16,7 +16,7 @@ This notebook aims to provide 3 main functions
 
 <br/><br/>
 
-### Pulled GA3 & GA4 Data
+#### Pulled GA3 & GA4 Data
 
 | GA3                   | GA4                             | 
 | ----------------------|---------------------------------|
