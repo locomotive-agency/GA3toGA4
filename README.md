@@ -41,17 +41,17 @@ The table above shows what GA3 data is matched with what GA4 data by default. Yo
 
 **Note**: ga:conversion_event is only a placeholder for whatever GA3 conversion event you wish to pull.
 
-### How To Use
+## How To Use
 
-#### Google Cloud project set-up
+### Google Cloud project set-up
 
 This tool assumes that you have a Google Cloud project created already. This project will contain your from dataset (raw GA4 data from a daily export) and your to dataset (select GA4 data formatted to GA3 style) that will be created by this tool.
 
 Ensure that BigQuery Daily Export is set up for your chosen GA4 account to your desired Google Cloud project and that you have a table with your raw GA4 data. If you don’t, follow the sets [here](https://support.google.com/analytics/answer/9358801?hl=en) to set it up. This should be set up **without** Streaming Export, and should just be a Daily Export.
 
-#### Part 1: GA4 to GA3 SQL Workflow
+### Part 1: GA4 to GA3 SQL Workflow
 
-##### Install BigQuery Data Transfer
+#### Install BigQuery Data Transfer
 This is needed to set up the reoccuring queries. 
 
 You will need to restart the runtime of this notebook after running this cell.
@@ -60,11 +60,11 @@ This can be done by going to Runtime > Restart runtime or pressing CTRL + M + .
 
 ![Restart runtime location](https://user-images.githubusercontent.com/89162068/171264419-eadd41e1-34ab-4896-99fe-b66f6eba9c8f.png)
 
-##### Load needed libraries
+#### Load needed libraries
 
 Run cell to load in the libraries needed for this tool.
 
-##### Sign in and Authenticate
+#### Sign in and Authenticate
 
 Run the cells and input the project name of your Google Cloud Project. You will be asked to sign in. Choose the account with your Google Cloud project on, which should be the same account you are using in colab.
 
@@ -76,7 +76,7 @@ You do this by going to Google Analytics, selecting the GA3 view that you want t
 
 ![Adding service account to GA3 property visual](https://user-images.githubusercontent.com/89162068/171265347-3b0dd2cf-b9ab-4f5b-a06f-caac99a9e170.png)
 
-##### Specify configuration parameters for the Source and Target Datasets
+#### Specify configuration parameters for the Source and Target Datasets
 
 For the BigQuery From Table (Source Dataset) you need to input the following:
 
@@ -89,22 +89,22 @@ For the BigQuery To Table (Target Dataset) you will need to input the following:
 * `to_dataset_id` : Name of the dataset you want created/to use in your project to hold modified GA4 data.
 * `to_table_name` : Name of the table you want created in the target dataset.
 
-##### Authenticate BigQuery
+#### Authenticate BigQuery
 
 Run cell to authenticate BigQuery Client.
 
-##### Built Initial Table
+#### Built Initial Table
 Run to pull GA4 data and create the target dataset and table, will error if table is already created under specified name and location.
 
-##### Set Up Daily Reoccuring Pull
+#### Set Up Daily Reoccuring Pull
 Run to set up the daily scheduled query in Google Cloud. If it errors, check that you have restarted your runtime after [installing BigQuery Data Transfer](https://github.com/locomotive-agency/ga4toga3/edit/main/README.md#install-bigquery-data-transfer).
 
-##### Review Data
+#### Review Data
 Run to pull data from the target dataset for review.
 
-#### Part 2: Backfil GA3 data
+### Part 2: Backfil GA3 data
 
-##### Specify configuration parameters for the GA3 View
+#### Specify configuration parameters for the GA3 View
 
 You need to input the following:
 
@@ -112,12 +112,12 @@ You need to input the following:
 * `pull_start_date` : The beginning of the timeframe of GA3 data that you want to pull.
 * `website_url` : Full URL of the website for the view, including any leading https://. This will be added to the landing_page pulled for GA3 data in order to match the format of GA4 data.
 
-##### Backfill GA3 Data
+#### Backfill GA3 Data
 Run to backfil GA3 data to your GA4 data. 
 
 **Note**: If you want to add a conversion event, you will need to add it to the metrics list and to the order dictionary in in lib/process_ga3.py.
 
-##### Review Data
+#### Review Data
 Run to pull data from the target dataset for review.
 
 ## Acknowledgements
