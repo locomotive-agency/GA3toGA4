@@ -129,6 +129,7 @@ Run to pull data from the target dataset for review.
 
 ## Acknowledgements
 * Thank you to [JR](https://github.com/jroakes), [Joe](https://github.com/joejoinerr), and [Savannah](https://github.com/SavannahCasto) for the work on the creation of this tool.
+* Thanks to Derek Perkins of [Nozzle](https://nozzle.io/) for SQL code review.
 * This tool was created and released open for the SEO community by [Locomotive.agency](https://locomotive.agency/).
 
 <br/><br/><br/>
