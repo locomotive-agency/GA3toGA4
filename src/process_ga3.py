@@ -6,7 +6,7 @@ import json
 import os
 
 
-def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url):
+def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url, goal_metric="ga:goalCompletionsAll"):
 
 
     def get_end_data():
@@ -39,7 +39,7 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url):
             'ga:pageviews',
             'ga:uniquePageviews',
             'ga:timeOnPage',
-            #{ga:conversion_event},
+            goal_metric,
             'ga:transactionRevenue',
             'ga:transactions',
         ]
@@ -125,7 +125,7 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url):
     'ga:pageviews': 'page_views',
     'ga:uniquePageviews': 'unique_page_views',
     'ga:timeOnPage': 'engagment_time_sec_per_session',
-    #'{ga:conversion_event}: 'conversions',
+    goal_metric: 'conversions',
     'ga:transactionRevenue': 'ecommerce_revenue',
     'ga:transactions': 'ecommerce_transactions',
     }
