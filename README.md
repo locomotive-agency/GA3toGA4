@@ -1,15 +1,15 @@
-# GA4toGA3
+# GA3toGA4
 A Python tool for formatting GA4 data to match and be backfilled with historical GA3 data in BigQuery.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1X7bWFcxsoe2WJ892vbbpsERNurv28k7S?usp=sharing)
 
 ## About
 
-### Welcome to GA4 to GA3 tool
+### Welcome to GA3 to GA4 tool
 
 :warning: **Warning**: This tool should be considered alpha software and likely to break.  It has been tested on a handful of sites and is shared as a proof-of-concept.  Use at your own risk.  While we will not support this open-source tool, please submit issues so we can make it better.
 
-GA4 to GA3 is a tool for creating and filling a Bigquery table with available GA4 data and formatting it to be compatible with historical data pulled from the Google Analytics Reporting API v4 for GA3 data. This tool has been designed to run in google colab and to automate a majority of the process.
+GA3 to GA4 is a tool for creating and filling a Bigquery table with available GA4 data and formatting it to be compatible with historical data pulled from the Google Analytics Reporting API v4 for GA3 data. This tool has been designed to run in google colab and to automate a majority of the process.
 
 This notebook aims to provide 3 main functions
 1. Create table with select GA4 data formatted to GA3 data style.
@@ -54,7 +54,7 @@ This tool assumes that you have a Google Cloud project created already. This pro
 
 Ensure that BigQuery Daily Export is set up for your chosen GA4 account to your desired Google Cloud project and that you have a table with your raw GA4 data. If you don’t, follow the sets [here](https://support.google.com/analytics/answer/9358801?hl=en) to set it up. This should be set up **without** Streaming Export, and should just be a Daily Export.
 
-### Part 1: GA4 to GA3 SQL Workflow
+### Part 1: GA3 to GA4 SQL Workflow
 
 #### Install BigQuery Data Transfer
 This is needed to set up the reoccuring queries. 
