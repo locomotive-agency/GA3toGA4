@@ -1,7 +1,7 @@
 # GA4toGA3
 A Python tool for formatting GA4 data to match and be backfilled with historical GA3 data in BigQuery.
 
-[![Open In Colab]{:target="_blank"}(https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1X7bWFcxsoe2WJ892vbbpsERNurv28k7S?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1X7bWFcxsoe2WJ892vbbpsERNurv28k7S?usp=sharing)
 
 ## About
 
