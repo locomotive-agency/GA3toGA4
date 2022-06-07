@@ -7,7 +7,7 @@ A Python tool for formatting GA4 data to match and be backfilled with historical
 ![Logo for GA3toGA4](https://github.com/locomotive-agency/GA3toGA4/blob/7bae90e97605ea0de97e649eb6a45541ebfe5b31/ga3toga4-2.png)
 
 <p align="center"> 
-  [Website](http://www.serverless.com)
+  <a href="https://datastudio.google.com/u/0/reporting/58d63144-52a0-424e-a30e-fc46d0edc72f/page/I7luC">View the Dashboard</a>
 </p>
 
 
