@@ -33,6 +33,7 @@ This notebook aims to provide 3 main functions
 | GA3                   | GA4                             | 
 | ----------------------|---------------------------------|
 | ga:date               | date                            | 
+| ga:hostname           | landing_page                    | 
 | ga:landingPagePath    | landing_page                    | 
 | ga:country            | country                         |
 | ga:region             | region                          |
@@ -46,13 +47,13 @@ This notebook aims to provide 3 main functions
 | ga:sessions           | sessions                        |
 | ga:uniquePageviews    | unique_page_views               |
 | ga:timeOnPage         | engagment_time_sec_per_session  |
-| *ga:conversion_event* | *conversions*                   |
+| *goal_metric*         | *conversions*                   |
 | ga:transactionRevenue | ecommerce_revenue               |
 | ga:transactions       | ecommerce_transactions          |
 
 The table above shows what GA3 data is matched with what GA4 data by default. You can edit these values by changing ga4-to-ga3-query.sql and process_ga3.py. 
 
-**Note**: ga:conversion_event is only a placeholder for whatever GA3 conversion event you wish to pull.
+**Note**: ga:conversion_event is only a placeholder for whatever GA3 conversion event you wish to pull. Defaults to ga:goalCompletionsAll.
 
 <br/><br/><br/>
 
@@ -125,7 +126,7 @@ You need to input the following:
 
 * `ga3_view_id` : The GA3 view ID that you want to use to backfill your GA4 data with.
 * `pull_start_date` : The beginning of the timeframe of GA3 data that you want to pull.
-* `website_url` : Full URL of the website for the view, including any leading https://. This will be added to the landing_page pulled for GA3 data in order to match the format of GA4 data.
+* `goal_metric` : GA3 goal you want to pull.
 
 #### Backfill GA3 Data
 Run to backfil GA3 data to your GA4 data. 
