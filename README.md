@@ -3,6 +3,10 @@ A Python tool for formatting GA4 data to match and be backfilled with historical
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1X7bWFcxsoe2WJ892vbbpsERNurv28k7S?usp=sharing)
 
+![Logo for GA3toGA4](https://github.com/locomotive-agency/GA3toGA4/blob/7bae90e97605ea0de97e649eb6a45541ebfe5b31/ga3toga4-2.png)
+
+<br/><br/>
+
 ## About
 
 ### Welcome to GA3 to GA4 tool
