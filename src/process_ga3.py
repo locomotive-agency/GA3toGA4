@@ -6,7 +6,7 @@ import json
 import os
 
 
-def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url, goal_metric="ga:goalCompletionsAll"):
+def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, goal_metric="ga:goalCompletionsAll"):
 
 
     def get_end_data():
@@ -22,6 +22,7 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url, goal
     def get_report(ua, ga3_view_id, pull_start_date, pull_end_date, pageToken):
         dimensions = [
             'ga:date',
+            'ga:hostname',
             'ga:landingPagePath',
             'ga:country',
             'ga:region',
@@ -105,7 +106,7 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, website_url, goal
     print("Cleaning up data...")
     df = pd.DataFrame(mylist)
     print(df.head())
-    df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"] = website_url + df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"].astype(str)
+    df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"] = 'https://' + df['ga:hostname'].loc[df['ga:landingPagePath'] != "(not set)"] + df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"].astype(str)
     df['ga:date'] = pd.to_datetime(df['ga:date']).dt.date
 
 
