@@ -53,7 +53,7 @@ This notebook aims to provide 3 main functions
 
 The table above shows what GA3 data is matched with what GA4 data by default. You can edit these values by changing ga4-to-ga3-query.sql and process_ga3.py. 
 
-**Note**: ga:conversion_event is only a placeholder for whatever GA3 conversion event you wish to pull. Defaults to ga:goalCompletionsAll.
+**Note**: goal_metric is only a placeholder for whatever GA3 conversion event you wish to pull. Defaults to ga:goalCompletionsAll.
 
 <br/><br/><br/>
 
