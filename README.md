@@ -154,5 +154,5 @@ We would love to feature dashboards users have made with the data.  Please let u
 
 
 ## Stuck?
-LOCOMOTIVE Agency can help with GA4 implementations of all kinds.  If you need help getting this up and running on your infrastructure, [get in touch with our sales team](mailto:marty@locomotive.agency).
+LOCOMOTIVE Agency can help with GA4 implementations of all kinds.  If you need help getting this up and running on your infrastructure, get in touch with our sales team --> [marty (at) locomotive.agency](mailto:marty@locomotive.agency).
 
