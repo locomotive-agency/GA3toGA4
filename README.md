@@ -149,3 +149,10 @@ Run to pull data from the target dataset for review.
 If any errors, concerns, or areas for improvement are found, please open an issue for it on this repo.
 If you want to change something, please make a pull request.
 We would love to feature dashboards users have made with the data.  Please let us know if you have any to share!
+
+<br/><br/><br/>
+
+
+## Stuck?
+LOCOMOTIVE Agency can help with GA4 implementations of all kinds.  If you need help getting this up and running on your infrastructure, [get in touch with our sales team](mailto:marty@locomotive.agency).
+
