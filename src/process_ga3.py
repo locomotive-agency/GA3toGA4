@@ -1,25 +1,28 @@
 from lib.ua import UniversalAnalytics, AnalyticsQuery, AnalyticsReport
 from google.cloud import bigquery
+from typing import Union, List, Dict
 import datetime
 import pandas as pd
 import json
 import os
 
 
-def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, goal_metric="ga:goalCompletionsAll"):
+def get_ga3(
+    to_table_id: str,
+    client: bigquery.client.Client,
+    ga3_view_id: str,
+    pull_start_date: str,
+    goal_metric: str = "ga:goalCompletionsAll",
+) -> None:
 
+    def get_report(
+        ua: UniversalAnalytics,
+        ga3_view_id: str,
+        pull_start_date: str,
+        pull_end_date: datetime.date,
+        pageToken: str,
+    ) -> Dict[str, Union[str, float, int]]:
 
-    def get_end_data():
-        sql = """SELECT MIN(date) FROM `{to_table_id}`""".format(to_table_id=to_table_id)
-
-        result = client.query(sql)
-        df2 = result.to_dataframe()
-        first_date = df2.iloc[0]['f0_']
-        pull_end_date = (first_date - datetime.timedelta(days=1))
-
-        return pull_end_date
-
-    def get_report(ua, ga3_view_id, pull_start_date, pull_end_date, pageToken):
         dimensions = [
             'ga:date',
             'ga:hostname',
@@ -57,39 +60,52 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, goal_metric="ga:g
         return response
 
 
-    def get_token(response):
+    def get_token(
+        response: Dict[str, Union[str, float, int]],
+    ) -> str:
+
         for report in response.get('reports', []):
             pageToken = report.get('nextPageToken', None)
         return pageToken
 
 
-    def dict_transfer(response, mylist):
+    def dict_transfer(
+        response: Dict[str, Union[str, float, int]],
+        mylist: Union[List, List[Dict[str, Union[str, float, int]]]]
+    ) -> None:
+
         for report in response.get('reports', []):
             columnHeader = report.get('columnHeader', {})
             dimensionHeaders = columnHeader.get('dimensions', [])
             metricHeaders = columnHeader.get('metricHeader', {}).get('metricHeaderEntries', [])
             rows = report.get('data', {}).get('rows', [])
             for row in rows:
-                dict = {}
+                row_dict = {}
                 dimensions = row.get('dimensions', [])
                 dateRangeValues = row.get('metrics', [])
 
                 for header, dimension in zip(dimensionHeaders, dimensions):
-                    dict[header] = dimension
+                    row_dict[header] = dimension
 
                 for i, values in enumerate(dateRangeValues):
                     for metric, value in zip(metricHeaders, values.get('values')):
                         if ',' in value or '.' in value:
-                            dict[metric.get('name')] = float(value)
+                            row_dict[metric.get('name')] = float(value)
                         elif value == '0.0':
-                            dict[metric.get('name')] = int(float(value))
+                            row_dict[metric.get('name')] = int(float(value))
                         else:
-                            dict[metric.get('name')] = int(value)
-                mylist.append(dict)
+                            row_dict[metric.get('name')] = int(value)
+                mylist.append(row_dict)
 
 
     ua = UniversalAnalytics('/content/service.json')
-    pull_end_date = get_end_data()
+
+    sql = """SELECT MIN(date) FROM `{to_table_id}`""".format(to_table_id=to_table_id)
+
+    result = client.query(sql)
+    df2 = result.to_dataframe()
+    first_date = df2.iloc[0]['f0_']
+    pull_end_date = (first_date - datetime.timedelta(days=1))
 
     mylist = []
     pageToken = "0"
@@ -105,7 +121,6 @@ def get_ga3(to_table_id, client, ga3_view_id, pull_start_date, goal_metric="ga:g
 
     print("Cleaning up data...")
     df = pd.DataFrame(mylist)
-    print(df.head())
     df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"] = 'https://' + df['ga:hostname'].loc[df['ga:landingPagePath'] != "(not set)"] + df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"].astype(str)
     df['ga:date'] = pd.to_datetime(df['ga:date']).dt.date
 
