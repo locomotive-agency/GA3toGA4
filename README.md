@@ -67,6 +67,10 @@ Ensure that BigQuery Daily Export is set up for your chosen GA4 account to your 
 
 ### Part 1: GA3 to GA4 SQL Workflow
 
+First, open the notebook we have shared using Google Colab here: https://colab.research.google.com/drive/1X7bWFcxsoe2WJ892vbbpsERNurv28k7S?usp=sharing
+
+You can create your own editable copy of the notebook by going to File > Save a copy...
+
 #### Install BigQuery Data Transfer
 This is needed to set up the reoccuring queries. 
 
