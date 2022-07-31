@@ -7,12 +7,12 @@
 
 
 -- Pulls raw data from GA4 table
-WITH 
+WITH
 
 ga4Raw AS (
 
   SELECT
-  * 
+  *
   FROM `{project_id}.{dataset_id}.{table_prefix}*`
   WHERE PARSE_DATE('%Y%m%d', _table_suffix) BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL {prior_days} DAY) AND CURRENT_DATE()
 
@@ -52,12 +52,11 @@ ga4Flat AS (
     MAX(IF(params.key = "engagement_time_msec", params.value.int_value/1000, 0)) AS engagment_time_sec,
 
     -- Referral Data
-    MAX(IF(params.key = 'source', params.value.string_value, null)) utm_source,
-    MAX(IF(params.key = 'medium', params.value.string_value, null)) utm_medium,
-    MAX(IF(params.key = 'campaign', params.value.string_value, null)) utm_campaign,
+    MAX(traffic_source.source) utm_source,
+    MAX(traffic_source.medium) utm_medium,
 
     -- Ecommerce Data
-    MAX(ecommerce.transaction_id) ecommerce_transaction_id,
+    MAX(IF(event_name IN ('purchase', 'ecommerce_purchase', 'in_app_purchase', 'app_store_subscription_convert','app_store_subscription_renew','refund'), ecommerce.transaction_id, null)) ecommerce_transaction_id,
     MAX(IF(ecommerce.purchase_revenue IS NOT NULL, ecommerce.purchase_revenue, 0)) ecommerce_purchase_revenue,
 
 
@@ -77,13 +76,8 @@ ga4Sessions AS (
 
     -- Dimensions
     event_date,
-    MAX(IF(landing_page IS NOT NULL, landing_page, "(not set")) landing_page,
-    MAX(geo_country) country,
-    MAX(geo_region) region,
-    MAX(geo_city) city,
     MAX(utm_source) utm_source,
     MAX(utm_medium) utm_medium,
-    MAX(utm_campaign) utm_campaign,
 
     -- Usage Metrics
     COUNT(DISTINCT user_pseudo_id) users,
@@ -97,7 +91,7 @@ ga4Sessions AS (
     -- Goal Metrics
     SUM(conversions) conversions,
     SUM(ecommerce_purchase_revenue) ecommerce_revenue,
-    COUNT(DISTINCT ecommerce_transaction_id) ecommerce_transactions
+    COUNT(ecommerce_transaction_id) ecommerce_transactions
 
   FROM ga4Flat
   GROUP BY event_date, ga_session_id, user_pseudo_id

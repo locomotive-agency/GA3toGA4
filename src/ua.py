@@ -183,6 +183,19 @@ class AnalyticsQuery:
         self.raw['reportRequests'][0]['pageToken'] = page_token
         return self
 
+    def sampling_level(self, page_token: str) -> 'AnalyticsQuery':
+        """Return a new query that fetches with the specified segments.
+
+        Args:
+            sampling_level:
+                Field to set desired sample size.
+
+        Returns:
+            An updated AnalyticsQuery object.
+        """
+        self.raw['reportRequests'][0]['samplingLevel'] = sampling_level
+        return self
+
     def get(self) -> 'AnalyticsReport':
         raw_report = self.ua.service.reports().batchGet(body=self.raw).execute()
         return AnalyticsReport(raw_report, self)

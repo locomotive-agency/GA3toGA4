@@ -1,6 +1,7 @@
 from lib.ua import UniversalAnalytics, AnalyticsQuery, AnalyticsReport
 from google.cloud import bigquery
 from typing import Union, List, Dict
+from tqdm import tqdm
 import datetime
 import pandas as pd
 import json
@@ -55,6 +56,7 @@ def get_ga3(
             .metrics(metrics)
             .page_size(10000)
             .page_token(pageToken)
+            .sampling_level("LARGE")
         )
         response = query.get().raw
         return response
@@ -107,63 +109,91 @@ def get_ga3(
     first_date = df2.iloc[0]['f0_']
     pull_end_date = (first_date - datetime.timedelta(days=1))
 
-    mylist = []
-    pageToken = "0"
+    def last_day_of_month(any_day):
+        next_month = any_day.replace(day=28) + datetime.timedelta(days=4)
+        return next_month - datetime.timedelta(days=next_month.day)
 
-    print("Pulling GA3 data...")
+    def monthlist(begin,end):
+        begin = datetime.datetime.strptime(begin, "%Y-%m-%d")
+        end = datetime.datetime.combine(end, datetime.time.min)
 
-    while pageToken != None:
-        response = get_report(ua, ga3_view_id, pull_start_date, pull_end_date, pageToken)
-        pageToken = get_token(response)
-        dict_transfer(response, mylist)
-    else:
-        print("GA3 data download complete")
-
-    print("Cleaning up data...")
-    df = pd.DataFrame(mylist)
-    df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"] = 'https://' + df['ga:hostname'].loc[df['ga:landingPagePath'] != "(not set)"] + df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"].astype(str)
-    df['ga:date'] = pd.to_datetime(df['ga:date']).dt.date
-
-
-    order = {
-    'ga:date': 'date',
-    'ga:landingPagePath': 'landing_page',
-    'ga:country': 'country',
-    'ga:region': 'region',
-    'ga:city': 'city',
-    'ga:source': 'utm_source',
-    'ga:medium': 'utm_medium',
-    'ga:campaign': 'utm_campaign',
-    'ga:users': 'users',
-    'ga:newUsers': 'new_users',
-    'ga:entrances': 'entrances',
-    'ga:sessions': 'sessions',
-    'ga:pageviews': 'page_views',
-    'ga:uniquePageviews': 'unique_page_views',
-    'ga:timeOnPage': 'engagment_time_sec_per_session',
-    goal_metric: 'conversions',
-    'ga:transactionRevenue': 'ecommerce_revenue',
-    'ga:transactions': 'ecommerce_transactions',
-    }
-
-    df = df[order.keys()].rename(columns=order)
-
-    print("Uploading to BigQuery")
+        result = []
+        while True:
+            if begin.month == 12:
+                next_month = begin.replace(year=begin.year+1,month=1, day=1)
+            else:
+                next_month = begin.replace(month=begin.month+1, day=1)
+            if next_month > end:
+                break
+            result.append ((begin.strftime("%Y-%m-%d"),last_day_of_month(begin).strftime("%Y-%m-%d")))
+            begin = next_month
+        result.append ((begin.strftime("%Y-%m-%d"),end.strftime("%Y-%m-%d")))
+        return result
 
 
-    job_config = bigquery.LoadJobConfig(
-    write_disposition="WRITE_APPEND",
-    schema=[
-                bigquery.SchemaField("date", "DATE"),
-        ],
+    date_list = monthlist(pull_start_date,pull_end_date)
+
+    date_list.reverse()
+
+    print(date_list)
+
+
+    for date_range in tqdm(
+      date_list, desc = "Loading GA3 data"
+    ):
+      mylist = []
+      pageToken = "0"
+      df = pd.DataFrame()
+      
+      while pageToken != None:
+          response = get_report(ua, ga3_view_id, date_range[0], date_range[1], pageToken)
+          pageToken = get_token(response)
+          dict_transfer(response, mylist)
+
+      df = pd.DataFrame(mylist)
+      df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"] = 'https://' + df['ga:hostname'].loc[df['ga:landingPagePath'] != "(not set)"] + df['ga:landingPagePath'].loc[df['ga:landingPagePath'] != "(not set)"].astype(str)
+      df['ga:date'] = pd.to_datetime(df['ga:date']).dt.date
+
+
+      order = {
+      'ga:date': 'date',
+      'ga:landingPagePath': 'landing_page',
+      'ga:country': 'country',
+      'ga:region': 'region',
+      'ga:city': 'city',
+      'ga:source': 'utm_source',
+      'ga:medium': 'utm_medium',
+      'ga:campaign': 'utm_campaign',
+      'ga:users': 'users',
+      'ga:newUsers': 'new_users',
+      'ga:entrances': 'entrances',
+      'ga:sessions': 'sessions',
+      'ga:pageviews': 'page_views',
+      'ga:uniquePageviews': 'unique_page_views',
+      'ga:timeOnPage': 'engagment_time_sec_per_session',
+      goal_metric: 'conversions',
+      'ga:transactionRevenue': 'ecommerce_revenue',
+      'ga:transactions': 'ecommerce_transactions',
+      }
+
+      df = df[order.keys()].rename(columns=order)
+
+      print("Uploading to BigQuery")
+
+
+      job_config = bigquery.LoadJobConfig(
+      write_disposition="WRITE_APPEND",
+      schema=[
+                  bigquery.SchemaField("date", "DATE"),
+          ],
+        )
+
+      job = client.load_table_from_dataframe(
+          df,
+          destination=to_table_id,
+          job_config=job_config
       )
 
-    job = client.load_table_from_dataframe(
-        df,
-        destination=to_table_id,
-        job_config=job_config
-    )
-
-    job.result()
+      job.result()
 
     print("Query results loaded to the table {}".format(to_table_id))
