@@ -183,7 +183,7 @@ class AnalyticsQuery:
         self.raw['reportRequests'][0]['pageToken'] = page_token
         return self
 
-    def sampling_level(self, page_token: str) -> 'AnalyticsQuery':
+    def sampling_level(self, sampling_level: str) -> 'AnalyticsQuery':
         """Return a new query that fetches with the specified segments.
 
         Args:
